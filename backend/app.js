@@ -24,15 +24,17 @@ app.use(cookieParser())
 //Import all routes
 import productRoutes from './routes/product.js'
 import authRoutes from './routes/auth.js'
+import orderRoutes from './routes/order.js'
 
 app.use('/api/v1',productRoutes)
 app.use('/api/v1',authRoutes)
+app.use('/api/v1',orderRoutes)
 // Using error middleware
 
 app.use(errormiddleware)
 
 
-const server=app.listen(3000,()=>{
+const server=app.listen(4000,()=>{
     console.log(`Server started on PORT: ${process.env.PORT} IN ${process.env.NODE_ENV} MODE `)
 })
 

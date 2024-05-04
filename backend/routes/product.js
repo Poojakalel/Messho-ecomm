@@ -1,6 +1,8 @@
 import express from 'express'
-import { deleteProduct, 
+import { createProductReview, deleteProduct, 
+    deleteReview, 
     getProductDetails, 
+    getProductReviews, 
     getProducts,
      newProduct,
       updateProduct } from '../controllers/productController.js';
@@ -21,5 +23,15 @@ put(isAuthenticatedUser,authorizeRoles('admin'),updateProduct)
 
 router.route('/admin/products/:id').
 delete(isAuthenticatedUser,authorizeRoles('admin'),deleteProduct)
+
+router.route('/reviews')
+.get(isAuthenticatedUser,getProductReviews)
+.put(isAuthenticatedUser,createProductReview)
+
+router.route("/admin/reviews")
+.delete(isAuthenticatedUser,authorizeRoles("admin"),deleteReview)
+
+
+
 
 export default router

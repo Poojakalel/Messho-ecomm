@@ -20,6 +20,32 @@ export default (err,req,res,next)=>{
         error=new ErrorHandler(message,404)
     }
 
+     // Handled Mongoose duplicate key error
+
+
+    if(err.code===11000){
+        const message=`Duplicate ${Object.keys(err.keyValue)} entered`
+        error=new ErrorHandler(message,400)
+    }
+
+    // Handled wrong JWT error
+
+
+    if(err.name==="JsonWebTokenError"){
+        const message=`Json Web Token is invalid Try again!!`
+        error=new ErrorHandler(message,400)
+    }
+
+    // Handled expired JWT Error
+
+    if(err.name==="TokenExpiredError"){
+        const message=`Json Web Token is expired Try again!!`
+        error=new ErrorHandler(message,404)
+    }
+
+
+
+
 
     if(process.env.NODE_ENV==='DEVELOPMENT'){
 
