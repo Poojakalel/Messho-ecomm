@@ -7,6 +7,8 @@ import sendToken from "../utils/sendToken.js";
 import sendEmail from '../utils/sendEmail.js'
 import crypto from 'crypto'
 
+import {delete_file, upload_file} from '../utils/cloudinary.js'
+
 //Register user =>  /api/v1/register
 export const registerUser=catchAsyncErrors(async(req,res,next)=>{
     const {name,email,password}=req.body;
@@ -63,6 +65,34 @@ export const logout=catchAsyncErrors(async(req,res,next)=>{
     })
 })
 
+
+// Upload User Avatar  => /api/v1/me/upload_avatar
+
+export const uploadAvatar=catchAsyncErrors(async(req,res,next)=>{
+   
+    const avatarResponse=await upload_file(req.body.avatar,"messho/avatars")
+
+    // remove previous avatar
+
+    if(req?.user?.avatar?.url){
+        await delete_file(req?.user?.avatar?.public_id)
+    }
+
+    const user=await User.findByIdAndUpdate(req?.user?._id,{
+        avatar: avatarResponse,
+    })
+
+    res.status(200).json({
+
+        user,
+    })
+})
+
+
+
+
+
+
 // Forgot password  => /api/v1/password/forgot
 
 export const forgotPassword=catchAsyncErrors(async(req,res,next)=>{
@@ -82,7 +112,7 @@ export const forgotPassword=catchAsyncErrors(async(req,res,next)=>{
 
     //create reset password url
 
-    const resetUrl=`${process.env.FRONTEND_URL}/api/v1/password/reset/${resetToken}`
+    const resetUrl=`${process.env.FRONTEND_URL}/password/reset/${resetToken}`
 
     const message=getResetPasswordTemplate(user?.name,resetUrl);
     // console.log(message)

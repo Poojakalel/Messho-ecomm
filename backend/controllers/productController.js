@@ -5,7 +5,7 @@ import ErrorHandler from '../utils/errorHandler.js'
 
 // Create new Product => /api/v1/products
 
-export const getProducts=catchAsyncErrors(async(req,res)=>{
+export const getProducts=catchAsyncErrors(async(req,res,next)=>{
 
     const resPerPage=4
     
